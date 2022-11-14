@@ -8,15 +8,25 @@
   <title>Blog</title>
 </head>
 <body>
-    <div class = "container">
-        <h1 class='mb-2'>Company: <%= article.companyName %></h1>
-        <a href="/" class="btn btn-secondary">All Jobs/Internships</a>
-        <a href="/articles/edit/<%= article.id %>" class="btn btn-info">Edit</a>
-    </div>
-
-    <div>
-        <%= article.jobDescription %>
-    </div>
-    
+  <div class="container">
+    <h1 class="mb-1"><%= article.companyName %></h1>
+    <h6 class="text-danger mb-2">
+        Deadline: <%= article.deadline %>
+    </h6>
+    <hr>
+    <p class='text mb-2'>
+        <h4>Job Title:</h4> <%= article.jobTitle %><br>
+        <h4>Stipend:</h4> <%= article.stipend %><br>
+        <h4>Location:</h4> <%= article.location %><br>
+        <h4>Duration:</h4> <%= article.duration %><br>
+        <h4>Eligible Branches:</h4> <%= article.branches %><br>
+        <h4>Job Description:</h4>
+        <%= article.jobDescription %><br>
+    </p>
+    <hr>
+    <a href="<%= article.formLink %>" class="btn btn-success">Fill Application</a>
+    <a href="/" class="btn btn-secondary">All Jobs</a>
+    <a href="/articles/edit/<%= article.id %>" class="btn btn-info">Edit</a>
+  </div>
 </body>
 </html>
