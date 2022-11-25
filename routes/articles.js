@@ -1,9 +1,14 @@
 const express = require('express')
-const Article = require('./../models/article')
+const Article = require('./../models/article');
+const User = require('./../models/user');
 const router = express.Router();
 
 router.get('/new', (req, res) => {
     res.render('articles/new', {article: new Article() })
+})
+
+router.get('/fillApplication', (req, res) => {
+    res.render('articles/fillApplication', {user: new User()})
 })
 
 router.get('/edit/:id', async (req, res) => {
@@ -33,6 +38,7 @@ router.delete('/:id', async (req, res) => {
     await Article.findByIdAndDelete(req.params.id)
     res.redirect('/')
 })
+
 
 function saveArticleAndRedirect(path) {
     return async (req, res)  => {

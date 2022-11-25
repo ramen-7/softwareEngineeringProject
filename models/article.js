@@ -52,7 +52,6 @@ articleSchema.pre('validate', function(next) {
     if(this.companyName) {
         this.slug = slugify(this.companyName, {lower: true, strict: true })
     }
-
     next()
 })
 
