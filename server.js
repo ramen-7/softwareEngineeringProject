@@ -1,13 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const Article = require('./models/article')
-const User = require('./models/user')
 const articleRouter = require('./routes/articles')
 const userRouter = require('./routes/users')
 const methodOverride = require('method-override')
 const app = express()
+const cors = require('cors');
 
-mongoose.connect('mongodb://0.0.0.0:27017/', (err)=>{
+mongoose.connect('mongodb+srv://shivam:ewwwoBrgoZMS1t0V@cluster0.d33agmg.mongodb.net/?retryWrites=true&w=majority', (err)=>{
     if(err){
         console.log(err)
         throw err
@@ -19,6 +19,7 @@ mongoose.connect('mongodb://0.0.0.0:27017/', (err)=>{
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
+app.use(cors())
 
 
 app.get('/', async (req, res) => {
@@ -28,6 +29,6 @@ app.get('/', async (req, res) => {
 app.use('/articles', articleRouter)
 app.use('/users', userRouter)
 
-app.listen(5000,()=>{
+app.listen(5000, ()=>{
     console.log('Listening on port 5000')
 })

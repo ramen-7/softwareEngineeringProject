@@ -17,7 +17,7 @@ const articleSchema = new mongoose.Schema({
         required: true
     },
     stipend: {
-        type: String,
+        type: Number,
         required: true,
     },
     location: {
@@ -29,10 +29,6 @@ const articleSchema = new mongoose.Schema({
         required: true
     },
     branches: {
-        type: String,
-        required: true
-    },
-    formLink: {
         type: String,
         required: true
     },

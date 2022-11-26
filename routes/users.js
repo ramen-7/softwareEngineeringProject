@@ -3,9 +3,11 @@ const User = require('../models/user');
 const Article = require('../models/article');
 const router = express.Router();
 
+
 router.post('/', async (req, res) => {
+    
     let user = new User({
-        companyName: req.body.companyName,
+        companyName: Article.companyName,
         userName: req.body.userName,
         rollNumber: req.body.rollNumber,
         email: req.body.email,
@@ -14,6 +16,7 @@ router.post('/', async (req, res) => {
     })
     try {
         user = await user.save()
+        console.log(Article.jobTitle)
         console.log(`${user.userName} saved successfully`)
         res.redirect('/')
     } catch (e) {

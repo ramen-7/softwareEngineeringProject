@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     rollNumber: {
         type: Number,
         required: true
+    },
+    companyName: {
+        type: String,
+        required: true
     }
 })
 

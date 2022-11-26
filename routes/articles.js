@@ -7,9 +7,88 @@ router.get('/new', (req, res) => {
     res.render('articles/new', {article: new Article() })
 })
 
-router.get('/fillApplication', (req, res) => {
-    res.render('articles/fillApplication', {user: new User()})
+router.get('/fillApplication/:id', async (req, res) => {
+    console.log('entered')
+    try {
+        console.log('trying')
+        const article = await Article.findById(req.params.id)
+        if(article == null) {
+            res.redirect('/')
+        }
+        res.render('articles/fillApplication', {user: new User(), companyName: article.companyName, jobTitle: article.jobTitle})
+    } catch(err) {
+        console.log(err)
+    }
+    
 })
+
+router.get('/sort', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) -1|| 0;
+        const limit = parseInt(req.query.limit) || 5;
+        const search = req.query.search || "";
+        let sort = req.query.sort || "stipend";
+        let location = req.query.location || "All";
+
+        console.log("1")
+        const locationOptions = [
+            "Bangalore",
+            "Hyderabad",
+            "Gurgaon",
+            "Hyderabad",
+            "Delhi",
+            "Noida",
+            "Mumbai",
+            "Pune",
+            "Gujarat"
+        ];
+
+        console.log("2")
+        location == "All" 
+            ? (location = [...locationOptions])
+            : (location = req.query.location.split(","));
+        req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+
+        console.log("3")
+        let sortBy = {};
+        if (sort[1]) {
+            sortBy[sort[0]] = sort[1];
+        } else {
+            sortBy[sort[0]] = 'asc';
+        }
+
+        console.log("4")
+        const jobs = await Article.find({jobTitle: {$regex: search, $options: "i"}})
+            .where("location")
+            .in([...location])
+            .sort(sortBy)
+            .skip(page * limit)
+            .limit(limit);
+
+            console.log("5")
+        const total = await Article.countDocuments({
+            location: {$in: [...location]},
+            jobTitle: {$regex: search, $options: "i"}
+        });
+
+        console.log("6")
+        const response = {
+            error: false,
+            total,
+            page: page+1,
+            limit,
+            location: locationOptions,
+            jobs
+        };
+
+        res.send(response);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({error: true, message: "Filtering Error"});
+    }
+})
+
 
 router.get('/edit/:id', async (req, res) => {
     const article = await Article.findById(req.params.id)
@@ -23,6 +102,8 @@ router.get('/:slug', async (req, res) => {
     }
     res.render('articles/show', { article: article })
 })
+
+
 
 router.post('/', async (req, res, next) => {
     req.article = new Article()
